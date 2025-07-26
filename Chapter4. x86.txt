@@ -1,0 +1,663 @@
+	X86 ARCHITECTURE
+	* Complexity:
+	- Instructions from 1 to 15 bytes long.
+
+	- One operand must act as both a source and destination.
+
+	- One operand may come from memory.
+
+	- Several complex addressing modes.
+
+	* Saving grace:
+	- The most frequently used instructions are not too difficult
+	to build.
+
+	- Compilers avoid the portions of the architecture that are slow.
+
+
+	THE INTEL X86 ISA
+	• 1971: Intel 4004 (4-bit)
+	• 1972: Intel 8080 (8-bit)
+	• 1978: The Intel 8086 is announced (16-bit architecture)
+	• 1980: The 8087 floating point coprocessor is added
+	• 1982: The 80286 increases address space to 24 bits, +instructions
+	• 1985: The 80386 extends to 32 bits, new addressing modes
+	• 1989-1995: The 80486 (pipelined, on chip cache), Pentium, Pentium 
+	Pro add a few instructions (mostly designed for higher performance)
+	• 1997: MMX is added
+	• 2006-2008: Core 2 (64-bit), Core i3, i5, i7, Atom
+	• 2017: Core i9, instruction set extensions SSE4.1, SSE4.2, AVX2
+
+	
+	INSIDE AN 8086-CPU
+	* Execution unit (EU):
+	- General-purpose registers (AX, BX, CX, DX): These registers are 
+	used to store temporary values, results of calculations, or to 
+	transfer data to and from memory.
+
+	- Pointer and index registers (SP, BP, SI, DI):
+		+ Stack pointer (SP): Manages the stack.
+	
+		+ Base pointer (BP): Point to memory locations, especially 
+		useful for accessing function parameters.
+
+		+ Source index (SI) and Destination index (DI): Used in
+		string operations, specifying source and destination 
+		addresses.
+	
+	- Arithmetic logic unit (ALU): Perform arithmetic operations 
+	(such as addition, subtraction) and logical operations (AND, OR, 
+	XOR).
+
+	- Flags register: Store status flags like the carry flag, zero
+	flag, sign flag, and more, indicating the result of operations.
+
+	- Temporary registers: Used by the ALU to hold intermediate values
+	during execution.
+
+	- 16-bit ALU data bus: Connect ALU with other components within 
+	the EU to transfer data.
+
+	* Bus interface unit (BIU):
+	- Segment registers (CS, DS, SS, ES, FS):
+		+ Code segment (CS): Holds the address of the code segment.
+	
+		+ Data segment (DS): Holds the address of the data segment.
+
+		+ Stack segment (SS): Holds the address of the stack 
+		segment.
+
+		+ Extra segments (ES, FS): Additional segments for specific
+		purposes.
+
+	- Instruction pointer (IP): Points to the next instruction in the code segment
+	to be execute.
+
+	- Bus control logic: Manages the data flow between the CPU and the external bus.
+
+	- Instruction queue: The 8086 uses a 6-byte queue to prefetch instruction from memory,
+	which speeds up processing by having instructions ready before they are executed.
+
+	* Connection between EU and BIU:
+	- The EU and BIU work in parallel. The BIU is responsible for communication with external
+	memory and fetching instructions into the instruction queue, while the EU executes the
+	instructions already fetched. This helps optimize the execution speed.
+
+	- 20-bit address bus: Allows access to memory up to 1 MB.
+
+	- 16-bit data bus: Used to transfer data between the CPU and memory.
+
+
+	MEMORY ACCESS
+	* Segment size is 64 KB.
+
+	* Overlapped segment with 16-byte gap.
+	
+	* Logical address: Segment:Offset
+
+	* Physics address = (Segment * 16) + offset.
+
+	* 1 physics address can be access from many logical address, and can be invalid.
+
+	
+	REGISTER FILE
+	* General-purpose registers (32 bits):
+	This is the most commonly used group of registers, which can be used for various
+	purposes.
+	- eax (Accumulator): The accumulator register, commonly used for arithmetic
+	and logical operations, as well as returning values from functions.
+
+	- ebx (Base): The base register, often used as a pointer to data in memory.
+
+	- ecx (Count): The count register, typically used in loops.
+
+	- edx (Data): The data register, often used in conjunction with eax in large
+	multiplication / division operations.
+
+	- esi (Source index): The source index register, typically used as a pointer
+	to source data in string copy operations.
+
+	- edi (Destination index): The destination index register, typically used as a
+	pointer to destination data in string copy operations.
+
+	- esp (Stack pointer): The stack pointer register, pointing to the top of the
+	stack.
+
+	- ebp (Base pointer): The base pointer register, often used to reference local
+	variables within a function.
+
+	Note: The 32-bit registers (e.g., eax) can be accessed in smaller parts:
+	- ax (16-bit): The low part of eax (bits 15-0).
+	- ah (8-bit): The high part of ax (bits 15-8).
+	- al (8-bit): The low part of ax (bits 7-0).
+
+	
+	* Segment registers (16 bits):
+	- CS (Code Segment): The code segment register, containing the address of the 
+	currently executing code segment.
+
+	- DS (Data Segment): The data segment register, containing the address of the data 
+	segment.
+
+	- SS (Stack Segment): The stack segment register, containing the address of the 
+	stack segment.
+
+	- ES, FS, GS (Extra Segment): The extra segment register, which can be used for 
+	other purposes.
+
+	
+	* IP / EIP (Instruction pointer): This register contains the address of the next
+	instruction to be executed. In 32-bits mode, it's called EIP.
+
+	
+	* Process address space:
+	- Code: The code segment, containing the program's instructions.
+
+	- Data: The data segment, containing global variables and static data.
+
+	- Stack: The stack, used to store local variables, return addresses, and function
+	parameters.
+
+	
+	OTHER REGISTERS
+	* Flag register (EFLAGS - 32 bits)
+	- 6 bits are used to be status flags:
+		+ C/CF (carry flag): CF = 1.
+		
+		+ P/PF (parity flag): PF = 1 (0) when the number 1's bit in the result is
+		even (odd).
+
+		+ A/AF (auxiliary carry flag): Extended carry flag.
+
+		+ Z/ZF (zero flag): ZF = 1 when the result is 0.
+
+		+ N/NF (negative flag): NF = 1 when the result is less than 0.
+
+		+ O/OF (overflow flag): Overflow detected in signed number computation.
+
+	- 3 bits are used to be control flags:
+		+ T/TF (trap flag): Used for on chip debugging, TF = 1 CPU will work in a
+		single step mode. Generate an interrupt after each instruction.
+
+		+ I/IF (interrupt enable flag): I = 1, CPU will recognize the interrupts from
+		peripherals. For I = 0, the interrupts will be ignored.
+
+		+ D/DF (direction flag): D = 1, the string will be accessed from higher memory
+		address to lower memory address, and if D = 0, it will do the reverse.
+
+	* SOME OTHERS: IDTR (16bit), GDTR (48bit), LDTR (48bit), TR (16bit), ...
+
+	
+	INSTRUCTION FORMAT
+	Although the instruction structure has a total of 16 bytes, only instructions are 
+	allowed up to 15 bytes in length. (Opcode + Operand + Mod + Displacement + Imm).
+
+
+	ENCODING REAL X86 INSTRUCTIONS
+	* Prefix bytes: 0 to 4 special prefix values that affect the operation of the
+	instruction (Optional).
+	- Instruction prefix: Can modify specific aspects of the instruction.
+
+	- Address-size prefix: Changes the address size used in the instruction.
+
+	- Operand-size prefix: Modifies the size of the operands used by the instruction.
+	Without this prefix, the default operand size is determined by the operating mode.
+	Using this prefix allows switching between 16-bit and 32-bit operand sizes.
+
+	- Segment overrider prefix: Allows the instruction to use a different segment
+	register for memory addressing than the default one.
+
+	* Core instruction format:
+	- Opcode (1 or 2 bytes):
+		+ Standard 1-byte opcode: (ADD, SUB, MOV, ...). The first 6-bit is
+		represent the operation, 1 bit for s to store size of operand and 1 bit for d
+ 		to store direction.
+			# d = 0, from register to memory; d = 1, from memory to register.
+			# s = 0, 8-bit operands; s = 1, 16-bit or 32-bit operands.
+		
+		+ Two-byte opcode consisting of a 0Fh opcode expansion prefix byte.
+		The second byte then specifies the actual instruction.
+
+	- MOD-REG-R/M (0 or 1 byte)
+		+ MOD (2 bits):
+			# 00: Register indirect addressing mode or SIB with no displacement
+			(when R/M = 100) or displacement only addressing mode (when R/M = 101).
+			# 01: One-byte signed displacement follows addressing mode byte(s).
+			# 10: Four-byte signed displacement follows addressing mode byte(s).
+			# 11: Register addressing mode.
+
+		+ REG (3 bits):
+			reg value    |   8-bit reg   |   16-bit reg   |   32-bit reg
+			-----------------------------------------------------------
+   			000          |      al       |       ax       |      eax
+   			001          |      cl       |       cx       |      ecx
+   			010          |      dl       |       dx       |      edx
+   			011          |      bl       |       bx       |      ebx
+   			100          |      ah       |       sp       |      esp
+   			101          |      ch       |       bp       |      ebp
+   			110          |      dh       |       si       |      esi
+   			111          |      bh       |       di       |      edi
+ 
+		+ R/M (3 bits): Combined with MOD, helps CPU determine the type of operand (register
+		or memory) and how to access it.
+
+
+		MOD R/M Byte and Addressing mode
+	
+		00 000 [ eax ]
+		01 000 [ eax + disp8 ]
+		10 000 [ eax + disp32 ]
+		11 000 register ( al / ax / eax )
+	
+		00 001 [ ecx ]
+		01 001 [ecx + disp8 ]
+		10 001 [ecx + disp32 ]
+		11 001 register ( cl / cx / ecx )
+
+		00 010 [ edx ]
+		01 010 [ edx + disp8 ] 
+		10 010 [ edx + disp32 ]
+		11 010 register ( dl / dx / edx)
+
+		00 011 [ ebx ]
+		01 011 [ ebx+ disp8 ]
+		10 011 [ ebx+ disp32 ]
+		11 011 register ( bl / bx / ebx )
+
+		00 100 SIB Mode
+		01 100 SIB + disp8 Mode
+		10 100 SIB + disp32 Mode
+		11 100 register (ah / sp / esp )
+
+		00 101 32-bit Displacement-Only Mode -> No [ ebp ] addressing.
+		01 101 [ebp + disp8 ]
+		10 101 [ ebp + disp32 ] 
+		11 101 register (ch/bp/ ebp )
+
+		00 110 [ esi ] 
+		01 110 [ esi+ disp8 ]
+		10 110 [esi+ disp32 ]
+		11 110 register (dh / si / esi)
+
+		00 111 [ edi ]
+		01 111 [ edi + disp8 ]
+		10 111 [ edi + disp32 ]
+		11 111 register (bh / di / edi)
+
+
+	- SIB layout (Indirect addressing mode) (0 or 1 byte)
+		layout is used in the x86 architecture to provide more flexible memory addressing calculations. It allows efficient 
+		access to elements in arrays or data structures. Appear only when MOD = 00 or 10 and R/M = 100.
+
+		Base (3 bits) | Register
+		---------------------------
+		000           | EAX
+		001           | ECX
+		010           | EDX
+		011           | EBX
+		100           | ESP
+		101           | Displacement-only if MOD = 00, EBP if MOD = 01 or 10
+		110           | ESI
+		111           | EDI
+	
+		Scale (2 bits) | Scale Value
+		-------------------------------
+		00             | Index
+		01             | 2 * Index
+		10             | 4 * Index
+		11             | 8 * Index
+
+		Index (3 bits) | Register
+		---------------------------
+		000            | EAX
+		001            | ECX
+		010            | EDX
+		011            | EBX
+		100            | Illegal
+		101            | ESP
+		110            | EBP
+		111            | ESI
+	
+		Address = Base + (Index * scale) + displacement
+
+	* Displacement (0 or 1 or 2 or 4 bytes)
+	A displacement is an integer value encoded directly within the instruction.
+	It's used to calculate a memory address, typically in conjunction with a base 
+	register and/or an index register to access specific memory locations.
+	
+	- Direct addressing: The displacement is the full memory address.
+
+	- Base + Displacement addressing : The memory address is calculated by adding 
+	the displacement to the contents of a base register.
+
+	- SIB: The memory address is calculated by adding the displacement to the sum 
+	of a base register and an index register.
+
+	* Immediate (0 or 1 or 2 or 4 bytes)
+	An immediate is an integer value encoded directly within the instruction.
+	It represents a constant value used as an operand for the instruction.
+
+	
+	DATA ADDRESSING MODE
+	Type		|	Form		| 	Operand value			| 	Name
+
+	Immediate	|	$Imm		|	Imm				|	Immediate
+
+	Register	|	ra		|	R[ra]				|	Register
+
+	Memory		|	Imm		|	M[Imm]				|	Absolute address
+
+	Memory		|	(ra)		|	M[R[ra]]			|	Indirect
+
+	Memory		|	Imm(rb)		|	M[Imm + R[rb]]			|	Base + displacement
+
+	Memory		|	(rb, ri)	|	M[R[rb] + R[ri]]		|	Indexed
+
+	Memory		|	Imm(rb, ri)	|	M[Imm + R[rb] + R[ri]]		|	Indexed
+	
+	Memory		|	(, ri, s)	|	M[R[ri] * s]			|	Scaled indexed
+
+	Memory		|	Imm(, r, s)	|	M[Imm + R[ri] * s]		|	Scaled indexed
+
+	Memory		|	(rb, ri, s)	|	M[R[rb] + R[ri] * s]		|	Scaled indexed
+
+	Memory		|	Imm(rb, ri, s)	|	M[Imm + R[rb] + R[ri] * s]	|	Scaled indexed
+
+
+	Ex:
+
+	Address		|	Value	
+	0x100		|	0xFF
+	0x104		|	0xAB
+	0x108		|	0x13
+	0x10C		|	0x11
+
+	Register	|	Value
+	%rax		|	0x100
+	%rcx		|	0x1
+	%rdx		|	0x3
+
+	%rax = 0x100		-> Register
+	0x104 = 0xAB		-> Absolute address
+	$0x108 = 0x108		-> Immediate
+	(%rax) = 0xFF		-> Indirect
+	4(%rax) = 0xAB		-> Base + displacement
+	9(%rax, %rdx) = 0x11	-> Indexed
+	260(%rcx, %rdx) = 0x13	-> Indexed
+	0xFC(, %rcx, 4) = 0xFF	-> Scaled indexed
+	(%rax, %rdx, 4) = 0x11	-> Scaled indexed
+
+
+	OPERATIONS
+	* Data movement instructions
+	- MOV: The mov instruction copies the data item referred to by its second
+	operand into the location referred to by its first operand.
+		Syntax:
+		mov <reg>,<reg>
+		mov <reg>,<mem>
+		mov <mem>,<reg>
+		mov <reg>,<const>
+		mov <mem>,<const>
+
+		Ex:
+		mov AX, BX -> Copy the value in bx into ax.
+		mov byte ptr[var], 5 -> Store the value 5 into the byte at location var.
+
+	- The stack memory:
+		+ Works according to LIFO mechanism.
+
+		+ Used in the decreasing direction of the address (different from the usual
+		memory areas used in the increasing direction of the address). 
+
+		+ The SS:ESP register pair contains the segment:offset address on the top
+		of the stack.
+
+	- PUSH: places its operand onto the top of the hardware supported stack in the memory.
+		Syntax:
+		push <reg32>
+		push <mem>
+		push <con32>
+
+		Ex:
+		push EAX -> push eax on the stack.
+		push [var] -> push the 4 bytes at address var onto the stack.
+
+	- POP: removes 4-byte data element from the top of the hardware-supported stack
+	into the specified operand.
+		Syntax:
+		pop <reg32>
+		pop <mem>
+
+		Ex:
+		pop EDI -> pop the top element of the stack into EDI.
+		pop [EBX] -> pop the top element of the stack into memory that the four bytes
+		starting at location [EBX].
+
+	- LEA: Load effective address.
+		Syntax:
+		lea <reg32> <mem>
+
+		Ex:
+		lea edi, [ebx + 4 * esi] -> The quantity EBX + 4 * ESI is placed in EAX.
+		lea eax, [var] -> The value in var is placed in EAX.
+		lea eax, [val] -> The value val is placed in EAX.
+		lea eax, x -> the address of variable x is placed in EAX.
+
+	* String instructions:
+	MOVS, MOVSB, MOVSW: copy from the string source (locate in data segment) to destination
+	(locate in extra segment) by increment ESI and EDI; may be repeated.
+		Ex:
+		MOV SI, SRC
+		MOV DI, DST
+		MOV CX, 04H
+		CLD; -> clear the direction flag.
+		REP MOVSB
+		=> Move a string of length 4 bytes from source to destination.
+
+	* Arithmetic and Logic instructions:
+	- ADD: adds together its two operands, storing the result in its first operand.
+		Syntax:
+		add <reg>,<reg>
+		add <reg>,<mem>
+		add <mem>,<reg>
+		add <reg>,<con>
+		add <mem>,<con>
+
+		Ex:
+		add eax, 5 -> EAX <- EAX + 5.
+		add BYTE PTR[var] -> add 5 to the single byte stored at memory address var.
+
+	- SUB: subtracts its two operands, storing the result in its first operand.
+		Syntax:
+		sub <reg>,<reg>
+		sub <reg>,<mem>
+		sub <mem>,<reg>
+		sub <reg>,<con>
+		sub <mem>,<con>
+
+		Ex:
+		sub AL, AH -> AL = AL - AH.
+		sub EAX, 5 -> EAX = EAX - 5.
+
+	- INC/DEC: increments / decrements the contents of its operand by one.
+		Syntax:
+		inc <reg>
+		inc <mem>
+		dec <reg>
+		dec <mem>
+
+		Ex:
+		inc DWORD PTR[var] -> add one to the 32-bit integer stored at location var.
+		dec EAX -> subtract one from the contents of EAX.
+		
+	- iMUL: multiplication.
+	Three basic format: one-operand, two-operand and three operand.
+		Syntax:
+		imul <reg32>
+		imul <mem>
+		imul <reg32>,<reg32>
+		imul <reg32>,<mem>
+		imul <reg32>,<reg32>,<con>
+		imul <reg32>,<mem>,<con>
+
+		Ex:
+		imul ECX -> multiply the contents of ECX by EAX. Result stored in EDX:EAX.
+		imul EAX, [var] -> multiply the contents of EAX by the 32-bit contents of the memory location var. Store the result in EAX.
+		imul EDI, ESI, 25 -> EDI = ESI * 25.
+	
+	- iDIV: divides the contents of the 64 bit integer EDX:EAX by the specified operand value.
+	The quotient result of the division is stored into EAX, while the remainder is placed in EDX.
+		Syntax:
+		idiv <reg32>
+		idiv <mem>
+
+		Ex:
+		idiv EBX -> divide the contents of EDX:EAX by the contents of EBX.
+		idiv DWORD PTR[var] -> divide the contents of EDX:EAX by the 32-bit integer stored at memory location var.
+	
+	- CMP: Compare the values of the two specified operands, setting the condition codes in the machine
+	status word appropriated (based on flag register).
+		Destination == Source: CF = 0, ZF = 1.
+		Destination > Source: CF = 0, ZF = 0.
+		Destination < Source: CF = 1, ZF = 0.
+	
+		Syntax:
+		cmp <reg>,<reg>
+		cmp <reg>,<mem>
+		cmp <mem>,<reg>
+		cmp <reg>,<con>
+
+		Ex:
+		cmp DWORD PTR[var], 3
+		jeq loop
+		=> If the 4-byte integer stored at memory location var is equal to 4-byte constant 3,
+		jump to the location labeled loop.
+
+	- AND, OR, XOR: Bitwise logical and, or, and exclusive or.
+	Placing the result in the first operand location.
+		Syntax:
+		opcode <reg>,<reg>
+		opcode <reg>,<mem>
+		opcode <mem>,<reg>
+		opcode <reg>,<con>
+		opcode <mem>,<con>
+		
+		Ex:
+		and EAX, 0fH -> clear all but the last 4 bits of EAX.
+		xor EDX, EDX -> set the contents of EDX to zero.
+
+	- SHL, SHR: shift the bits in their first operand's contents left and right,
+	padding the result empty bit positions with zeros.
+		Syntax:
+		opcode <reg>,<con8>
+		opcode <mem>,<con8>
+		opcode <reg>,<cl>
+		opcode <mem>,<cl>
+
+		Ex:
+		shl EAX, 1 -> multiply the value of EAX by 2 (if the most significant bit is 0).
+		shr EBX, CL -> Store in EBX the floor of result of dividing the value of EBX by 2^n where n is the value in CL.
+
+	* Control flow instructions
+	- JMP: transfer program control flow to the instruction at the memory location
+	indicated by the operand.
+		Syntax:
+		jmp <label>
+		
+		Ex:
+		jmp BEGIN -> jump to the label named "BEGIN"
+
+	- 3 types of JMP instruction:
+		+ JMP SHORT (short jump)
+
+		+ JMP NEAR (near jump)
+
+		+ JMP FAR (far jump)
+
+		+------------+--------------------------------------------------+----------------+----------------------------------+-----------------------------------------+
+		| JMP Type   | Jump Range                                       | Memory Usage   | Encoding                         | Notes                                   |
+		+------------+--------------------------------------------------+----------------+----------------------------------+-----------------------------------------+
+		| JMP SHORT | -128 to +127 bytes from current location          | 2 bytes        | Relative address (relative)      | Short jump, memory efficient.           |
+		| JMP NEAR  | ±32,768 bytes (Real Mode) or ±2GB (Protected Mode)| 3-5 bytes      | Relative address (relative)      | Jump within same segment, larger range. |
+		| JMP FAR   | Any address within full address space             | 5-7 bytes      | Far address (segment:offset)     | Jump to a different segment.            |
+		+------------+--------------------------------------------------+----------------+----------------------------------+-----------------------------------------+
+
+	- Conditional jump:
+		+ Jump with flags for unsigned result: JA (JNBE), JB (JNAE), JE(JZ), JNA (JBE), JNB (JAE), JNE (JNZ)
+		
+		+ Jump with flags for signed result: JG (JNLE), JL (JNGE), JE (JZ), JNG (JLE), JNL (JGE), JNE (JNZ)
+
+		+ Jump with flags for value of a flag: JC, JZ(JE), JS, JO, JNC, JNZ(JNE), JNS, JNO
+
+	- Based on status of a set of condition codes that are stored in a special register
+	called machine status word
+		Syntax:
+		opcode <lable>
+
+		Ex:
+		cmp EAX, 0
+		jg done
+		=> Jump to the instruction named "DONE"
+		if the condition sastifies.
+
+	- LOOP, LOOPE/LOOPZ, LOOPNE/LOOPNZ: is a combination instruction of DEC CX and JNZ
+		Syntax:
+		<label:>
+			Task
+		loop <label>
+
+		Ex:
+		XOR AL, AL
+		MOV CX, 16
+		myloop:
+			INC AL
+			LOOP myloop
+		=> Repeat when CX != 0. Decrements CX after each loop.
+
+
+	PROCEDURE
+	* CALL <procedure name>
+		+ Use stack to store (PUSH) the address of the next instruction right after the CALL
+		instruction (where to return).
+		
+		+ Write to the EIP instruction pointer register the address of the first instruction
+		of the procedure.
+
+	* Procedure declaration
+		<Procedure name> PROC
+		
+		
+			ret
+		<Procedure name> ENDP
+
+	* RET: gets (POP) the value from the top of the stack and writes it to EIP register, so the
+	next instruction to be executed as the instruction right after the CALL instruction
+
+
+	INPUT / OUTPUT
+	* Independent on system: Interrupt generated by the software:
+	- Commands to swap with out of external devices: IN, OUT, ...
+	
+	- DOS and BIOS interrupt server subroutines: INT 21h, ...
+
+	* Dependent on system:
+	- Linux:
+		+ syscall
+
+		+ C library: puts, ...
+
+	- Windows:
+		+ API: call _WriteConsoleA@20, ...
+
+		+ C library: call _printf, ...
+
+
+	COMPARE 32-BIT MIPS AND X86 INSTRUCTION
+
+	MIPS				|	X86
+	
+	Three operands architecture	|	Two operands architecture
+
+	Load-Store Architecture		|	Register-Memory architecture
+
+	Fixed length instructions	|	Variable length instructions

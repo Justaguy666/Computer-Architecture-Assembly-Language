@@ -1,0 +1,185 @@
+	COMBINATIONAL CIRCUIT
+	* A combinational circuit is an interconnected set of gates
+	whose output at any time is a function only of the input
+	at that time.
+
+	* Consists of n binary input, m binary output.
+
+	* Can be defined in three ways:
+	- True table.
+
+	- Graphic symbol.
+
+	- Boolean equation.
+
+	
+	IMPLEMENT OF BOOLEAN FUNCTIONS
+	* Sum of product: The SOP form expresses that the output is 1 if any of 
+	the input combinations that produce 1 is true.
+
+		f = u1 + u2 + ... + un with uj = x1.x2...xi
+
+	* Product of sum: The POS form expresses that the output is 1 if all the input
+	combinations that produce 1 is true.
+
+		f = u1.u2...un with uj = u1 + u2 + ... + un
+
+
+	SIMPLIFY THE BOOLEAN FUNCTION
+	* Any two squares that are adjacent differ in only one of the variables.
+
+	* The top square of a column is adjacent to the bottom square, and the leftmost
+	square of a row is adjacent to the rightmost square.
+
+	* 4 cells located in 4 corners of the map are also considered adjacent cells.
+	
+
+	DESIGN A COMBINATION CIRCUIT
+	* Construct the true table
+
+	* Identify the Boolean function.
+
+	* Draw the logical circuit and test.
+
+
+	APPLICATION OF COMBINATIONAL CIRCUIT
+	* Adder/subtractor.
+
+	* Encoder/Decoder.
+
+	* Multiplexer/Demultiplexer.
+
+	* ALU
+
+	...
+
+
+	ADDER
+	* 1-bit adder: Used to add 2 1-bit binary numbers together.
+	- Half adder: input(A, B) -> output(S, C).
+	Used as a component in full adder.
+
+	- Full adder: input(A, B, Cin) -> output(S, Cout).
+	Used as a component in 4-bit adder, 8-bit adder, or do arithmetic calculation in CPU.
+	
+	* n-bit full adder:
+	- The carry-out of one full adder is connected to the carry-in of the adder
+	for the next most-significant bit.
+
+	- The carries ripple from the least-significant bit to the most-significant bit.
+	
+
+	ENCODER
+	* Consists of 2^n input, n output.
+
+	* Only one of input has the 1's value at the time.
+
+	* If the k-th input has 1's value, the output will perform
+	a value equal to k.
+
+
+	DECODER
+	* Consists of n input, 2^n output.
+
+	* Only one of which is asserted at any time.
+
+	* If the inputs form a binary pattern with the value k, 
+	then the output = 1 is the k-th output.
+
+	
+	MULTIPLEXER
+	Selects one of the 2^n input to be only one output based
+	on the n control input.
+
+	Ex: MUX 4-1 has 4 inputs(i0, i1, i2, i3), 1 output and 2 control inputs(s0, s1).
+	s0	| 	s1	|	f
+	0	|	0	|	i0
+	0	|	1	|	i1
+	1	|	0	|	i2
+	1	|	1	|	i3
+
+	
+	DEMULTIPLEXER
+	Selects one of the 2^n output from only one input based
+	on the n control input.
+
+	Ex: DEMUX 1-4 has 1 input, 4 outputs(y0, y1, y2, y3) and 2 control inputs(s0, s1).
+	s0	| 	s1	|	y0	|	y1	|	y2	|	y3
+	0	|	0	|	in	|	0	|	0	|	0
+	0	|	1	|	0	|	in	|	0	|	0
+	1	|	0	|	0	|	0	|	in	|	0
+	1	|	1	|	0	|	0	|	0	|	in
+
+
+	ALU
+	* The 1-bit ALU with 2 functions: AND, ADD.
+
+	* The 32-bits ALU with 2 functions: AND, ADD.
+
+	
+	SEQUENTIAL CIRCUIT
+	* A sequential circuit is an interconnected set of gates and the clock pulse.
+
+	* The current output of a sequential circuit depends not only on the current input,
+	but also on the history of inputs.
+
+	* Sequential circuit is capable of "remembering past states".
+
+	* Basic sequential circuit is flip-flops.
+
+	* Some type of sequential circuit:
+	- S-R flip-flop (Set-Reset flip-lop)
+	S	|	R	|	Q(n+1)
+	0	|	0	|	Q(n)		-> The output state remains unchanged (Q(n + 1) = Qn).
+	1	|	0	|	1		-> The output is set (Q(n + 1) = 1).
+	0	|	1	|	0		-> The output is reset (Q(n + 1) = 0).
+	1	|	1	|	-		-> The state is undefined (Invalid).
+	=> Application:
+		+ Basic state storage.
+
+		+ Control ON/OFF states in sequential circuits.
+
+	- J-K flip-flop (Update version of S-R flip-flop)
+	S	|	R	|	Q(n+1)
+	0	|	0	|	Q(n)		-> The output state remains unchanged (Q(n + 1) = Qn).
+	1	|	0	|	1		-> The output is set (Q(n + 1) = 1).
+	0	|	1	|	0		-> The output is reset (Q(n + 1) = 0).
+	1	|	1	|	-(Q(n))		-> The output toggles (Q(n + 1) = -Q(n)).
+	=> Application:
+		+ Resolves the undifined state issue of S-R flip-flop.
+
+		+ Very flexible and widely used in counters.
+	
+	- D flip-flop (Data/Delay flip-flop)
+	D	|	Q(n+1)
+	0	|	0
+	1	|	1
+	=> Application:
+		+ Acts as a bit storage circuit.
+		
+		+ Simplifies sequential logic design.
+
+		+ Commonly used in registers and memory elements.
+	
+		+ Ideal for data storage and signal synchronization.
+
+
+	APPLICATION OF SEQUENTIAL CIRCUIT
+	* Register (4-bit shift register).
+	-> Bit shifting.
+
+	-> Temporary storage.
+
+	-> Parallel-to-Serial and Serial-to-Parallel conversion.
+
+	-> Clocked registers.
+
+	-> Encoding and Decoding.
+
+	-> Counters.
+
+	-> Circuit performance improvement.
+
+	* Counter (Synchronous counter).
+
+

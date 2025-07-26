@@ -1,0 +1,79 @@
+		GENERATION OF DIGITAL COMPUTER
+	gen 1: Vacuum tubes (1940 - 1956).
+	gen 2: Transistors (1956 - 1963).
+	gen 3: Integrated Circuits (1964 - 1971).
+	gen 4: Microprocessors (1972 - now).
+	gen 5: Parallel Processing / AI (Under development).
+
+
+		CLASS OF COMPUTERS
+	* Personal Computers:
+	- General-purpose variety of software.
+	- Subject to cost / performance tradeoff.
+
+	* Server Computers:
+	- Network-based.
+	- High capacity, performance, reliability.
+	- Range from small server to building size.
+	
+	* Super Computers:
+	- High-end scientific and engineering calculations.
+	- Highest capacity but represent a small fraction of the overall computer market.
+	
+	* Embedded Computers:
+	- Hidden components from the system.
+	- Stringent power / performance / cost constraints.
+	- Only work on specific task.
+
+	
+		THE CHIP MANUFACTURING PROCESS
+	"The chip manufacturing process, also known as semiconductor fabrication or integrated circuit (IC) 
+	fabrication, is a complex and precise procedure. First, the chip is designed by engineers using specialized 
+	software to create the architecture and circuit layout. Then, silicon, the primary material, is extracted from sand 
+	and formed into silicon wafers through the Czochralski process. The silicon wafer is prepared for 
+	photolithography, where circuit patterns are transferred onto the surface of the wafer using photoresist and UV 
+	light through a mask.
+
+	Once the patterns are defined, doping is performed, adding impurities to the silicon to alter its electrical properties, 
+	forming transistors. Next, deposition and etching processes are carried out to add and remove material layers like metal or 
+	insulation on the wafer. After each deposition, a CMP (Chemical Mechanical Planarization) process smooths the surface to 
+	prepare it for the next layer.
+
+	Metal interconnections are then made to link the transistors together, forming the integrated circuit. The 
+	wafer undergoes several testing and inspection steps to ensure the chip functions correctly according to the 
+	design. Once this is complete, the wafer is diced into individual chips through a process called dicing, and 
+	then each chip is packaged in protective casings. The final chips undergo a final round of testing before 
+	being shipped to electronics manufacturers. The entire process takes place in clean rooms with strictly 
+	controlled environments to prevent dust or contaminants from interfering with chip production."
+
+
+		EIGHT GREAT IDEAS IN COMPUTER ARCHITECTURE
+	Design of Moore’s Law: Gordon Moore predicted that the number of transistors on a chip would double 
+	approximately every two years, leading to exponential improvements in performance and reduction in cost. This has 
+	driven the rapid development of computing technology.
+
+	Use Abstraction to Simplify Design: Abstraction allows designers to focus on a higher level of design by 
+	hiding lower-level details. It makes complex systems more manageable by using layers such as instruction sets,
+	algorithms, and data structures.
+
+	Make the Common Case Fast: Optimizing the performance of the most frequently executed parts of a system can 
+	lead to better overall performance. The goal is to identify and accelerate the "common case" operations.
+
+	Performance via Parallelism: Parallelism improves performance by doing multiple operations simultaneously. 
+	Multi-core processors and GPU architectures are examples of parallelism in modern computing.
+
+	Performance via Pipelining: Pipelining breaks down a task into smaller stages that can be executed in 
+	parallel, similar to an assembly line. This improves throughput and makes the process faster.
+
+	Performance via Prediction: By predicting future actions or instructions, such as branch prediction, computers 
+	can prefetch data or instructions, reducing delays and improving speed.
+
+	Hierarchy of Memory: A memory hierarchy, consisting of registers, cache, RAM, and storage, balances speed and 
+	cost. Faster memory is closer to the processor and more expensive, while slower memory is larger and cheaper, 
+	providing efficient data access.
+
+	Dependability via Redundancy: Redundancy, such as error correction and backup systems, ensures dependability 
+	and fault tolerance. By duplicating components or data, a system can continue to function even in the presence 	of failures.
+
+
+	

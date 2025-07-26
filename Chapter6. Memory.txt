@@ -1,0 +1,571 @@
+	MEMORY CLASSIFICATION
+	* Primary storage / internal memory: Registers (highest), cache, ROM, RAM.
+
+	* Secondary storage / external memory:
+	- Magnetic disk (HDD, floppy disk, magnetic tape, ...).
+	
+	- Optical disc (CD, DVD, BD, ...).
+
+	- Flash memory (USB, memory card, SSD, ...).
+
+	* Tertiary storage / tertiary memory: Tape library, disk library, optical jukebox, ...
+		 	CPU
+		 ^			 ^
+		 |			 |
+		 |	Register	 |	Access speed
+		 |			 |	Price / Storage unit
+	Primary	 |	Cache		 |
+		 |			 |
+		 |	Main Memory	 |
+		 |			 |
+		 +-----------------------+
+		 |			 |
+	Secondary|	Disk		 |
+		 |			 |
+		 +-----------------------+
+		 |			 |
+	Tertiary |	Tape library	 |
+		 |			 |
+		 +-----------------------|	Capacity
+					 v
+
+
+	PRIMARY STORAGE
+	* Register
+	- Storage with the smallest capacity but the fastest access speed.
+
+	- Inside CPU -> Store instructions and data (operands, calculation
+	results, status bits) for processing.
+
+	- Made by flip-flops.
+
+	- Usually organized into a "Register file".
+
+	* Read-only memory (ROM)
+	- ROM - A type of memory that is read-only, non-writable, and does not
+	require power to maintain its contents.
+
+	- PROM - Programable ROM, can be written only once, needs special 
+	equipment to program.
+
+	- EPROM - Erasable PROM, can write but all the storage cells must
+	be erased (by UV) to the same initial state.
+
+	- EEPROM - Electrically EPROM, can be written in byte-level at
+	any time without erasing prior contents, takes much longer to
+	write than read.
+
+	- FlashROM - Cannot erase in byte-level, must erase block-level,
+	but the writing and erasing speed is very high.
+
+	* Random Access Memory (RAM)
+	- SRAM (Static RAM):
+		+ Storage structure:
+		# Uses flip-flop(made up of 4 - 6 transistors) to store data.
+
+		# Does not need to be refreshed frequently because each cell
+		holds its state as long as power is supplied.
+	
+		+ Speed: Very fast, as it doesn't require refreshing and allows
+		direct access to each memory cell.
+
+		+ Storage density: Lower than DRAM because each memory cell
+		requires more transistors, making it take up more space on a chip.
+
+		+ Application: Typically used as cache memory in CPUs and in applications
+		requiring high speed due to it fast access time.
+
+		+ Power consumption: Consumes less power when maintaining data, but due to
+		the complex structure, it may use more power in certain scenarios.
+
+		+ Cost: More expensive than DRAM due to the more complex structure and
+		larger space required on the chip.
+
+	- DRAM (Dynamic RAM):
+		+ Storage structure:
+		# Uses one transistor and one capacitor per memory cell to store
+		data as an electric change in the capacitor.
+
+		# Requires frequent refreshing because the capacitor loses its 
+		charge over time, leading to data loss if not refreshed.
+
+		+ Speed: Lower than SRAM because it requires time to refresh memory
+		cells and has more complex data access.
+
+		+ Storage density: Higher than SRAM because each cell only requires
+		one transistor and one capacitor, allowing for more data to be stored
+		in the same chip area.
+
+		+ Application: Used as main memory (RAM) in computers, smartphones,
+		and other devices due to its high density and lower cost.
+
+		+ Power consumption: Consumes more power than SRAM, as it needs to be
+		refreshed frequently to maintain the data.
+
+		+ Cost: Less expensive than SRAM because of its simpler structure and
+		higher storage density.
+
+	- SDRAM (Synchronous DRAM): is a type of DRAM that operates in sync with the system's
+	clock, meaning it synchronizes with the CPU clock to transfer data in a coordinated manner.
+	
+	- SDR-SDRAM (Single Data Rate SDRAM): an older type of SDRAM, where data transmitted at
+	single rate per clock cycle.
+		+ DIMM 168-pin: refers a memory module (DIMM - Dual In-line Memory Module) 
+		with 168 pins. It is used to install RAM onto the motherboard of a computer.
+		The DIMM design has pins on both sides of the board for data transmission.
+
+		+ Data bus: 64 bit.
+
+		+ Specifications table for SDR-SDRAM:
+		Standard Name	|	Memory Clock Speed	|	Cycle Time	|	I/O Bus Clock Speed	|	Peak Transfer Rate
+		SDR-66		|	66 MHz			|	15 ns		|	66 MHz			|	528 MB/s
+		SDR-100		|	100 MHz			|	10 ns		|	100 MHz			|	800 MB/s
+		SDR-133		|	133 MHz			|	7.5 ns		|	133 MHz			|	1064 MB/s
+
+	- DDR-SDRAM (Double Data Rate SDRAM): a newer SDRAM, where data transmitted are double rate per clock cycle.
+		+ DDR1-SDRAM (184-pin DIMM).
+
+		+ DDR2-SDRAM (240-pin DIMM).
+
+		+ DDR3-SDRAM (240-pin DIMM).
+
+		+ DDR4-SDRAM (288-pin DIMM).
+	
+		+ Data bus: 64 bit.
+
+		+ Specifications table for DDR-SDRAM:
+		Standard Name	|	Memory Clock Speed	|	Cycle Time	|	I/O Bus Clock Speed	|	Data Transfers per Second	|	Module Name	 |	Peak Transfer Rate
+		DDR-200		|	100 MHz			|	10 ns 		|	100 MHz			|	200 Million			|	PC-1600		 |	1600 MB/s
+		DDR-400		|	200 MHz			|	5 ns 		|	200 MHz			|	400 Million			|	PC-3200		 |	3200 MB/s
+		DDR2-400	|	100 MHz			|	10 ns		|	200 MHz			|	400 Million			|	PC2-3200	 |	3200 MB/s
+		DDR2-1066	|	266 MHz			|	3.75 ns		|	533 MHz			|	1066 Million			|	PC2-8500/PC2-8600|	8533 MB/s
+		DDR3-800	|	100 MHz			|	10 ns		|	400 MHz			|	800 Million			|	PC3-6400	 |	6400 MB/s
+		DDR3-2133	|	266 MHz			|	3.75 ns		|	1066 MHz		|	2133 Million			|	PC3-17000	 |	17066 MB/s
+		DDR4-1600	|	200 MHz			|	5 ns		|	800 MHz			|	1600 Million			|	PC4-12800	 |	12800 MB/s
+		DDR4-3200	|	400 MHz			|	2.5 ns		|	1600 MHz		|	3200 Million			|	PC4-25600	 |	25600 MB/s
+
+
+	* Cache
+	- Using SRAM technology, faster than main memory (using DRAM memory).
+
+	- Acts as fast access buffer (intermediate between CPU and main memory).
+
+	- Temporarily stores a partial copy main memory's contents to reduce
+	accessing to main memory.
+
+
+	- Principle of operation
+		+ Two principles of locality:
+		# Temporal locality:
+			& Items accessed recently are likely to be accessed again soon.
+
+			& e.g, instructions in a loop, induction variables.
+
+		# Spatial locality:
+			& Items near those accessed recently are likely to accessed soon.
+
+			& e.g, sequential instruction access, array data.
+
+		+ When CPU/IO needs to read data from main memory:
+		# Check if it's already in cache or not ?
+
+		# If yes (cache hit): read the contents of the cache, no need to access
+		main memory.
+
+		# If No (cache miss): copy the memory blocks containing the data to be
+		from main memory to cache and then to CPU/IO. The time it takes to process
+		a cache miss is called a missed penalty.
+
+	- Cache design:
+	+ Cache organization: When you need to access a memory cell, how do you know
+	if that cell is already in the cache? Then how to identify that space ?
+			# Cache line (Cache block): Each small chunk of memory in the cache holds the portion
+			of data from the main memory (RAM). Each cache line has a memory address and contains
+			data from a contiguous region of main memory.
+
+			# Tag: A part of the address used to identify if the required data is present in the cache.
+			
+			# Index: A part of the address used to identify the position (set) in the cache
+			where the data might be stored.
+
+			# Block offset: Specifies the specific location whin a cache line, used to
+			identify the part of data within the cache.
+			
+			# Mapping technic:
+			& Fully associated mapping:
+				% A memory block can be stored into any cache line.
+
+				% The memory address will have the following structure
+					
+						Block, tag s	|	Word w
+						(22 bits)	|	(2 bits)
+						
+					^ s - number of bits identifying the block address, used to determine which
+					block is stored in the cache line.
+
+					^ w - number of bits identifying the word address in a block.
+
+				% Since a block can be stored into any line, to determine whether the block is 
+				already in the line or not, all lines must be traversed.
+				
+				% Pros: no conflict misses because there are no fixed indexes.
+				
+				% Cons: searching is slower because the tag must be compared with all cache lines,
+				leading to higher latency.
+
+				Ex:
+				MAIN MEMORY
+				|	block address	|	   word address		|
+				|			|	1	|	0	|
+				|	0		|	1	|	0	|
+				|	1		|	3	|	2	|
+				|	2		|	5	|	4	|
+				|	3		|	7	|	6	|
+				|	4		|	9	|	8	|
+				|	5		|	11	|	10	|
+				|			|		|		|
+
+				CACHE
+				|	line address	|	tag	|	w1	|	w0	|
+				|	0		|	4	|	9	|	8	|
+				|	1		|	9	|	...	|	...	|
+				|	2		|	2	|	5	|	4	|
+				|	3		|	15	|	...	|	...	|
+
+				CPU requests:
+				00001 -> tag = 0, word = 1 -> miss, then replace.
+				01000 -> tag = 4, word = 0 -> hit (8)
+				00011 -> tag = 1, word = 1 -> miss, then replace.
+				01010 -> tag = 5, word = 0 -> miss, then replace.
+
+			& Direct mapping:
+				% Each block of main memory Bj (m bytes) is unique mapped into
+				a cache element (line) Li as following:
+
+						Li = Bj mod L
+
+				% The memory address will have the following structure
+
+						Tag s-r		|	Cache line r	|	word w
+						(8 bits)	|	(14 bits)	|	(2 bits)
+			
+					^ s - number of bits identifying the block address.
+
+					^ w - number of bits identifying the word address in a block.
+
+					^ r - number of bits identifying cache line address.
+
+					^ (s - r) - the number of bits that determine which block stored
+					in the cache line.
+
+				% Pros: simple to implement, fast access.
+
+				% Cons: If two memory blocks have the same index, they will replaced each other,
+				causing conflict misses.
+
+				Ex:
+				MAIN MEMORY
+				|	block address	|	   word address		|	multiplier
+				|			|	1	|	0	|	
+
+				|	0		|	1	|	0	|	
+				|	1		|	3	|	2	|	0
+				|	2		|	5	|	4	|
+				|	3		|	7	|	6	|
+
+				|	4		|	9	|	8	|
+				|	5		|	11	|	10	|	1
+				|	6		|		|		|
+				|	7		|		|		|
+
+				|	8		|		|		|
+				|	9		|		|		|	2
+				|	10		|		|		|
+				|	11		|		|		|
+
+				|	12		|		|		|
+				|	13		|		|		|	3
+				|	14		|		|		|
+				|	15		|		|		|
+
+				CACHE
+				|	line address	|	tag	|	w1	|	w0	|
+				|	0		|	1	|	9	|	8	|
+				|	1		|	2	|	...	|	...	|
+				|	2		|	0	|	5	|	4	|
+				|	3		|	3	|	...	|	...	|
+				
+				CPU request:
+				00001 -> Tag = 0, line = 0, word = 1 -> miss, then replace.
+				01000 -> Tag = 1, line = 0, word = 0 -> hit (8)
+				00011 -> Tag = 0, line = 1, word = 1 -> miss, then replace.
+				01010 -> Tag = 1, line = 1, word = 0 -> miss, then replace.
+
+			& K-way Set Associate mapping:
+				% Combine ideas between direct mapping and full associate mapping.
+					^ The cache lines are divided into S sets, each of which has K lines.
+
+					^ Each block Bj is mapped (directly) to only one set Si as following.
+
+							Si = Bj mod S
+
+					^ Lines in a set are managed as in full associate mapping.
+
+				% The memory address will have the following structure
+
+						tag s-d		|	cache set d	|	word w
+						(9 bits)	|	(13 bits)	|	(2 bits)
+				
+					^ s - number of bits identifying the block address.
+
+					^ w - number of bits identifying the word address in a block.
+
+					^ d - number of bits identifying cache set address.
+
+					^ (s - d) - number of bits that determine which block stored
+					in a cache line.
+				
+				% S = L, K = 1 -> direct mapping.
+
+				% S = 1, K = L -> fully associate mapping.
+
+				% Pros: reduces conflict misses compared to direct mapping, while still being
+				simpler than fully associate mapping.
+
+				% Cons: it can introduce some delay due to having to compare multiple cache
+				lines within a set.
+
+	+ Replacement strategy: When the cache ha no more space but still needs to hold
+	another data from main memory, how to identify which data will be replaced ?
+		# Direct mapping: No choice, just replaced by the newer.
+
+		# Fully associate mapping and set associate mapping:
+			& Random.
+		
+			& FIFO (First in first out).
+
+			& LRU (Least recently used).
+
+			& LFU (Least frequently used).
+
+	+ Write policy: 
+		# Problem:
+			& CPU can change content of cache lines. I/O may address main
+			memory directly.
+
+			& If content of a cache element is changed/modified, how to
+			this change is reflected to main memory vice versa ?
+		
+		# Write-through:
+			& All writes go to main memory as well as cache.
+
+			& Lots of traffic, slows down writes.
+
+		# Write-back:
+			& Updates initially made in cache only and "update bit"
+			for cache slot is set.
+
+			& Then if the block stored in a line is to be replaced,
+			write to main memory only if update bit is set.
+
+			& I/O must access main memory through cache.
+
+	+ Block size and Cache size.
+		# Block size:
+			& Too small: decrease spatial locality.
+
+			& Too big: take long time to transfer block to cache (miss penalty).
+
+			& Block size is usually from 8 to 64 bytes.
+
+		# Cache size:
+			& Cache size is proportional to cost.
+
+			& Cache size is not sure proportional to speed. e.g if the cache size 
+			increases that mean it can store more data, so the number of miss penalty
+			can be reduced, but it also take more time to check data is in cache or not.
+
+			& Too small: the number of blocks that can be cached is small, leading
+			to a high cache miss rate.
+
+			& Too big: Lots of unnecessary cached contents. It takes long time to
+			check if the block is in the cache or not.
+
+	+ Type and Level of cache.
+		# Types of cache:
+			& On-chip cache vs Off-chip cache.
+
+			& Unified cache vs Split cache.
+
+		# Cache levels: L1, L2, L3, ...
+			& L1 cache:
+			% Size 10s KB.
+
+			% Hit time: 1s cycle.
+
+			% Miss rate: 1-5%.
+
+			& L2 cache:
+			% Size 100s KB.
+
+			% Hit time 10s cycle.
+
+			% Miss rate: 10-20%.
+
+
+	AVERAGE MEMORY ACCESS TIME (Using L2 -> faster than not using)
+	* AMAT = L1 Hit time + L1 Miss rate * L1 Miss penalty.
+
+	* L1 Miss penalty = L2 Hit time + L2 Miss rate * L2 Miss penalty.
+
+	=> AMAT = L1 Hit time + L1 Miss rate * (L2 Hit time + L2 Miss rate * L2 Miss penalty).
+
+
+	WRITING CACHE-FRIENDLY CODE
+	* Make the common case go fast:
+	- The core functions of the program.
+
+	- Especially the loops inside functions.
+
+	* Minimize the number of cache misses in each inner loop:
+	The total number of loads and stores, loops will higher hit rates will run faster. 
+
+	-> Maximize the temporal locality in your programs by using a data object as often
+	as possible once it has been read from memory.
+
+	-> Maximize the spatial locality in your programs by reading data objects sequentially,
+	in the order they are stored in memory (should traverse matrix by rows).
+	
+
+	SECONDARY STORAGE
+	* Magnetic disk: -> Highest capacity of three, but the durability is low.
+	- Still be the most common permanent data storage device, consisting of
+	one or more layers of flat magnetically coated disks to store data.
+
+	- 2 types:
+		+ Floppy disks - slow, only 1 disk layer.
+
+		+ Hard Disk Drives - HDD - faster, more layers of disks.
+
+	- HDD:
+		+ Organization:
+			# Consists of many layers of platters, magnetically coated
+			in 1 or both sides.
+	
+			# Each side has a corresponding head to read or write data.	
+
+			# Each side has many concentric circles (tracks).
+	
+			# Aligned tracks on each platter form cylinders.
+
+			# Each track is subdivided into sectors, typically each sector contains
+			4096 magnetically region (4096 bits = 512 bytes).
+
+			# Sector is the unit of read/write operation.
+
+		+ Access mechanism:
+			Disk latency = Seek time + Rotation time + Transfer time
+			# Seek time - Time to move the head to the correct track for
+			reading/writing, depending on the number of tracks on one side
+			and the speed of actuator (average time < 10 ms).
+
+			# Rotation time - Time to rotate the disk so that the sector
+			to be read/written is below the head, depending on the rotation
+			speed of the disk.
+				& 7200 rpm (revolutions per minute) -> 120 rps.
+
+				& 1 revolution = 1/120 s ~ 8.33 ms.
+
+				& Average (1/2 revolution) = 4.17 ms
+			
+			# Transfer time - Time to read/write and transfer data, depending on
+			the magnetic coverage density of the sector and the communication standard
+			(ATA, SATA, SCSI, ...).
+
+	- Magnetic disk capacity:
+		+ Floppy disks: 1 platter, 2 heads, 80 tracks/head, 18 sectors/track.
+		-> 2 * 80 * 18 * 4096 / 8 ~= 1.44 MB.
+
+		+ HDD: 16 heads, 684 cylinders, 18 sectors/track.
+		-> 16 * 684 * 18 * 4096 / 8 ~= 96.4 MB.
+
+	* Mass storage device: RAID
+	- RAID: Redundant array of inexpensive disks.
+		+ Combine multiple (physical) drives into a single (logical)
+		disk system using hardware (RAID controller) or software.
+
+		+ Data stored in distributed physical disk.
+
+		+ Transparent to the user.
+	
+	- Purpose:
+		+ Ensure data redundancy.
+
+		+ Performance improvement.
+
+	- RAID types:
+		+ RAID 0 (striping):
+			# Data is divided into small blocks and distributed across multiple disks,
+			improving read/write speeds.
+
+			# No redundancy: If one disk falls, data is lost.
+
+			# Increases performance but does not protect data.
+
+		+ RAID 1 (mirroring):
+			# Data is duplicated on two disks. If one disk fails, data can still be accessed
+			from the other disk.
+
+			# Provides data redundancy but does not improve read performance much.
+		=> The most expensive solution.
+		
+		+ RAID 0+1 (striping + mirroring):
+			# Combines RAID 0 and RAID 1. Data is striped across two disks (RAID 0) 
+			and mirrored onto two other disks (RAID 1).
+			
+			# Improves performance and provides redundancy but can be inefficient in terms of storage.
+
+		+ RAID 1+0 (mirroring + striping):
+			Similar to RAID 0+1 but with a different arrangement, making it more fault-tolerant.
+			RAID 1+0 offers better redundancy and performance compared to RAID 0+1.
+		
+		+ RAID 5: Data is striped across disks with parity information distributed across the disks,
+		balancing performance, capacity, and redundancy.
+
+		+ RAID 6: Similar to RAID 5 but with two parity blocks, providing better fault tolerance
+		at the cost of more storage space.
+
+	* Optical disc: -> lowest speed, lowest capacity, but the durability is higher than magnetic disk.
+	- Compact Disc (CD).
+
+	- Digital Versatile Disc (DVD).
+
+	- High Definition DVD (HD DVD) & Blue-ray Disc.
+
+	* Flash memory: -> highest speed and durability.
+	- The type of storage technology that most commonly used today 
+	(USB, memory card, ROM, SSD).
+	
+	- No power required to maintain data.
+
+	- Pros: Fast, durability, less power consumption.
+
+	- Cons: Cost, limited number of data write/erase cycles.
+
+	- Types of flash memory:
+		+ USB.
+
+		+ Memory card.
+
+		+ Solid State Drive (SSD).
+
+	TERTIARY STORAGE
+	* Tape library: The device allows thousands of tapes to be combined to form a storage device
+	with capacities up to TBs, PBs.
+
+	* Disk library: The device allows to combine thousands of hard disks to form a storage device
+	with capacities up to TBs, PBs.
+
+	* Optical jukebox: The device allows to combine thousands of optical discs (CD, DVD, Blue-ray disk)
+	to form a storage device with a capacity of up to TBs, PBs.
+

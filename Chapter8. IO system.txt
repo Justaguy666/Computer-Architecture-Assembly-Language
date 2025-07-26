@@ -1,0 +1,148 @@
+	I/O DEVICES
+	* Can be typify by:
+		- Behavior: input, output, storage.
+
+		- Partner: Human / machine.
+
+		- Data rate: bytes/sec, transfer/sec.
+
+	* Character and Block devices: The device interface gives the illusion
+	that devices support the same API - character stream and block access.
+
+	Application/User: read character from device -> naming, protection, read, write
+
+	Operating system: character & block API
+	Hardware: Keyboard, mouse, etc.
+	=> Hardware specific PIO, interrupt handling, or DMA.
+
+
+	I/O MODULES
+	* Interface to the processor and memory via the system bus or control switch.
+
+	* Interface to one or more peripheral devices.
+
+
+	I/O REGISTER MAPPING
+	* Memory-mapped I/O
+	- Registers are addressed in same space as memory.
+	
+	- Address decoder distinguishes between them.
+
+	- OS uses address translation mechanism to make them only accessible to kernel.
+
+	* Isolated I/O
+	- Separate instructions to access I/O registers.
+
+	- Can only be executed in kernel mode.
+
+
+	I/O DATA TRANSFER
+	Data transfer between CPU and I/O devices can be handled in generally three types of modes:
+
+	* Program I/O: The CPU directly checks the status of the I/O device after sending a read/write command.
+	If the device is not ready, the CPU will continuously check until there is a result.
+
+	* Interrupt-driven I/O: The CPU sends a read/write command to the I/O device, then continues with other
+	tasks. When the device completes, it sends an interrupt signal to the CPU. The CPU temporarily halts its
+	current task to handle the interrupt and perform the necessary actions.
+
+	* Direct Memory Access: The CPU only needs to send a read/write command to DMA controller. The DMA 
+	controller will automatically handle data transfer between the I/O device and memory, without direct
+	CPU involvement.
+
+
+	Method			|		Advantage		| 		Disadvantage
+	
+	Program I/O		|		Simple			|		CPU is wasted waiting
+
+	Interrupt-driven I/O	|		High performance	|		Interrupt handling cost
+
+	DMA			|		High speed		|		Requires specialized hardware
+
+
+	I/O COMMANDS
+	* I/O devices are managed by I/O Controller hardware.
+
+	* The processor issues an address, specifying I/O module and device, and an I/O command.
+	The commands are:
+	- Control: This command is used to adjust the status of the I/O device, such as starting or stopping it,
+	or changing its mode of operation.
+
+	- Test: The test command is used to check whether the device is ready or if there are any errors.
+	The CPU can use this command to determine if the device is prepared to send or receive data.
+
+	- Read: This command is issued when CPU needs to read data from the I/O device, such as reading from a disk,
+	keyboard or sensors.
+
+	- Write: The write command is sent when CPU needs to send data to the I/O device, for example, writing data
+	to a disk or sending signal to a speaker.
+
+
+	I/O REQUEST LIFECYCLE
+	* User process request I/O: A user (or program) requests an I/O operation, such as reading from keyboard, writing
+	to disk, or accessing the network.
+
+	* Kernel I/O subsystem:
+	- The OS (kernel) receives the request and passes it to the I/O subsystem of kernel.
+
+	- The I/O subsystem checks if the request can be fulfilled immediately.
+		+ If possible: The data is returned directly to the process.
+		+ If not: The request is forwarded to the device driver.
+ 
+	* Kernel I/O subsystem sends request to device driver:
+	- The I/O subsystem sends the request to the appropriate device driver.
+
+	- The process may be blocked until the request is completed.
+
+	* Device driver processes request: The device driver processes request, sending control commands to the device,
+	configuring the device, and waiting for an interrupt.
+
+	* Device controller monitors device and generates interrupt: The device controller monitors the physical device's
+	operations, when the operation is completed, the controller sends an interrupt signal to the CPU.
+
+	* Interrupt handler:
+	Interrupt handler in the kernel receives the interrupt signal and performs the following tasks:
+	- Stores data (if it's a read operation) in the driver's buffer.
+
+	- Sends a signal to unblock the process if needed.
+
+	* Kernel I/O subsystem determines completion and returns to process:
+	- The kernel's I/O subsystem determines the status of the request (completed, error, etc.).
+	
+	- Data (if applicable) is passed back to the process.
+
+	- A return code is sent to the process to inform it of the result of the request.
+	
+
+	I/O BUS TYPE
+	* Processor-Memory buses
+	- Short, high speed.
+
+	- Design is matched to memory organization.
+
+	* I/O buses
+	- Longer, allowing multiple connections.
+
+	- Connect to processor-memory bus through a bridge.
+
+
+	TYPICAL I/O SYSTEM OF AN X86 PERSONAL COMPUTER
+	* The CPU sends requests to access data or execute instructions to the northbridge controller.
+
+	* The northbridge controller forwards the request to main memory or PCIe devices as needed.
+
+	* Data is transferred between components via the bus at appropriate speeds.
+
+	* The southbridge controller manages slower I/O devices like hard drives and USBs.
+
+
+
+
+
+
+
+
+
+
+
+

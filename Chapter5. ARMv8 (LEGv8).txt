@@ -1,0 +1,440 @@
+	INTRODUCTION
+	* LEGv8 is  a subset of ARMv8 instruction set architecture, designed for educational purposes.
+
+	* ARMv8 architecture: A 64-bit instruction set architecture that supports modern devices
+	such as smartphones and tablets.
+
+	* Simplification: LEGv8 removes complex details, retaining only the essential parts to
+	make learning and understanding easier.
+	
+	* Open source: LEGv8 is an open-source project, allowing the community to contribute and
+	further its development.
+
+	
+	CHARACTERISTICS OF LEGV8
+	* RISC (Reduced instructions set computing): LEGv8 is based on the RISC architecture, meaning
+	it has a small and easy-to-understand instruction set.
+
+	* 64-bit architecture: LEGv8 is part of the ARMv8, supporting both 32-bit and 64-bit
+	modes, bit it typically focuses on the 64-bit mode.
+
+	* LEGv8 instruction set includes groups of instruction such as:
+	- Arithmetic calculations.
+
+	- Logic instructions.
+
+	- Data transfer instructions.
+
+	- Branch control instructions.
+
+	
+	REGISTER SET
+	* General-purpose registers: LEGv8 provides 32 general-purpose registers, each 64-bit 
+	in size (DoubleWord) (X0 - X31).
+	- X0 - X7: Used as function arguments or return values.
+
+	- X8: Holds the address of the return value.
+
+	- X9 - X15: Temporary registers.
+
+	- X16 - X17 (IP0 - IP1): Temporary registers used by the linker or can also
+	be used as general-purpose temporary registers.
+
+	- X18: Platform register for platform-independent code or as a temporary register.
+
+	- X19 - X27: Saved registers, used to hold values that need to be preserved across
+	function calls.
+
+	- X28 (SP): Stack pointer, points to the top of the stack.
+
+	- X29 (FP): Frame pointer, points to the current function's frame.
+
+	- X30 (LR): Link register, holds the return address after a function call.
+
+	- XZR (X31): Contains the constant value 0.
+
+	* Additionally, there are 32 sub-registers, each 32-bit in size (Word) (W0 - W31).
+	-> This allows for faster computation and supports a 32-bit instruction format.
+
+	* Flag register: NZCV Flag register includes the following flags:
+	- N: Negative.
+
+	- Z: Zero.
+
+	- C: Carry.
+
+	- V: Overflow.
+
+	* Floating-point registers:
+	- 32-bit: S0-S31.
+
+	- 64-bit: D0-D31.
+
+	
+	ARITHMETIC CALCULATIONS
+	* Syntax:
+		opt opr,opr1,opr2
+		
+		- opt (operator).
+		- opr (operand): register stores result.
+		- opr1 (operand 1): register stores the first operand.
+		- opr2 (operand 2): register stores the second operand or constant.
+
+	* ADDITION/SUBTRACTION:
+		Syntax:
+		ADD X1,X2,X3 	-> X1 = X2 + X3.
+		ADDI X1,X2,#20 	-> X1 = X2 + 20.
+
+		SUB X1,X2,X3	-> X1 = X2 - X3.
+		SUBI X1,X2,#20 	-> X1 = X2 - 20.
+
+		ADDS X1,X2,X3	-> ADD but set flags.
+		ADDIS X1,X2,#20	-> ADDI but set flags.
+		
+		SUBS X1,X2,X3	-> SUB but set flags.
+		SUBIS X1,X2,#20 -> SUBI but set flags.
+
+	* MULTIPLICATION/DIVISION:
+		Syntax:
+		MUL X1,X2,X3	-> X1 = X2 * X3 (64 low bits of 128 result bit).
+		SMULH X1,X2,X3	-> X1 = X2 * X3 (64 high bits of signed 128 result bit).
+		SMULL X1,X2,X3	-> X1 = X2 * X3 (64 low bits of signed 128 result bit).
+
+		SDIV X1,X2,X3 	-> X1 = X2 / X3 (signed division).
+		UDIV X1,X2,X3	-> X1 = X2 / X3 (unsigned division).
+
+
+	DATA TRANSFER:
+	* Besides simple variables, there are complex variables representing various types
+	of data structure, such as arrays.
+
+	* Complex data structures have more data elements than the number of CPU registers
+	available. So, how do we store them ?
+	-> Most of the data is stored in RAM, and only a small portion is loaded into CPU
+	registers when needed for processing.
+
+	* What about the problem of transferring data between registers and memory ?
+	-> This handled by a set of data transfer instructions.
+
+	* Main memory
+	- Can be viewed as a very large 1D array, where each element is a memory cell of equal size.
+
+	- These memory cells are numbering starting from 0.
+	-> This numbering is called the memory address.
+
+	- To access data in memory cell, you need to provide the address of that memory cell.
+
+	* Instruction format:
+		Syntax:
+		opt opr,[opr1, #opr2]
+
+		- opt: load / store.
+		- opr: register stores doubleword.
+		- opr1: register stores base address.
+		- opr2: constant.
+
+	* Two main operations:
+	- Load register: Load a doubleword from main memory to a register in CPU.
+
+			LDUR X1,[X2,#40] -> Assign X1 by the value that contained at memory location (X2 + 40).
+	
+	- Store register: Store a doubleword from a register in CPU to main memory.
+			
+			STUR X1,[X2,#40] -> Store the value contained in register X1 to the memory location (X2 + 40).
+
+	* Notation:
+	- X2 in the examples above is called base register, usually used to store starting location of a array/structure.
+
+	- 20 is called offset, used to access the element of the array/structure.
+
+	* Expand: Load, Store 1 word.
+	- Load word: LDURSW.
+
+	- Store word: STRURW.
+
+	- Syntax is similar to LDUR and STUR.
+
+	* Expand: Load, Store 2 byte.
+	- Load half: LDURH.
+
+	- Store half: STURH.
+
+	- Syntax is similar to LDUR and STUR.
+
+	* Expand: Load, store 1 byte.
+	- Load half: LDURB.
+
+	- Store half: STURB.
+
+	- Syntax is similar to LDUR and STUR.
+
+	* Exclusive load and store operations: LEGv8 also supports exclusive load and store operations,
+	which are useful when multiple threads or processes access the same memory region (8 bytes).
+	- Load exclusive register: LDXR
+	-> Loads a value from memory into a register and marks that memory location as exclusive.
+	The system will track whether any other thread or process attempts to modify that memory.
+
+	- Store exclusive register: STXR.
+	-> After performing the LDXR instruction, if the memory has not been modified by another
+	thread or process, the STXR instruction will store the new value into memory and succeed.
+	If the memory was modified by another thread between LDXR and STXR, the STXR will fail and
+	typically return a value indicating failure, requiring the whole operation to be retried.
+	
+	* Assigning value to registers:
+	- Move wide with zero: After assigning a value to the register, the remaining bits of the
+	register are set to 0.
+
+			MOVZ X1, #20, LSL #0 -> X1 = 20 * 2^0.
+			MOVZ X1, #20, LSL #16 -> X1 = 20 * 2^16.
+
+	- Move wide with keep: After assigning a value to the register, the remaining bits of the
+	register are left unchanged.
+	
+			MOVK X1, #20, LSL #0 -> X1 = 20 (store 20 to 0-15 bit of X1, while other not changed).
+			MOVK X1, #20, LSL #16 -> X1 = 20 (store 20 to 16-31 bit of X1, while other not changed).
+	
+	- Assigning value between two registers:
+			
+			MOV X1, X2 -> X1 = X2.
+
+	- Assigning a variable's address to a register:
+
+			ADRP X0, num1 -> load the base address of the variable num1 into register X0.
+			ADD x0, x0, :lo12:num1 -> add 12 lower bit of num1 for complete address assignment.
+
+	LOGIC INSTRUCTIONS
+	* Syntax:
+		opt opr,opr1,opr2
+		
+		- opt (operator).
+		- opr (operand): register stores result.
+		- opr1 (operand 1): register stores the first operand.
+		- opr2 (operand 2): register stores the second operand or constant.
+
+	* LEGv8 supports for 3 groups of logical instruction:
+	- AND, ORR, EOR (xor): The second operand must be register.
+
+	- ANDI, ORRI, EORI: The second operand must be constant.
+
+	- Flag-affectable instructions: ANDS, ANDIS, ...
+
+	* LEGv8 doesn't directly supports for NOT.
+
+	* To do NOT, we can xor that register with all bit 1 value.
+
+	
+	LOGICAL SHIFT
+	* Syntax:
+		opt opr,opr1,opr2
+		
+		- opt (operator).
+		- opr (operand): register stores result.
+		- opr1 (operand 1): register stores the first operand.
+		- opr2 (operand 2): constant.
+
+	* LEGv8 supports for 2 groups of logical shift:
+	- Logical shift:
+		+ LSL (Left shift logical): Add 0 to the leftmost.
+
+		+ RSL (Right shift logical): Add 0 to the rightmost.
+
+	- Arithmetic shift:
+		+ There is no left shift arithmetic.
+
+		+ RSA (Right shift arithmetic): Add bit equal to the signed value.
+
+	
+	BRANCH
+	* Similar to C:
+	- if (cond) clause
+
+	- if (cond) 
+		clause1
+
+	  else
+		clause2
+	-> if (cond) goto L1
+	   clause 2
+	   goto L2
+
+	   L1: clause1
+
+	   L2: ...
+
+	* Brach with condition:
+	- CBZ X1,label	-> if X1 == 0 goto label
+	
+	- CBNZ X1,label	-> if X1 != 0 goto label
+
+	* Compares two values:
+	- CMP opr1, opr2 -> opr1: register, opr2: register/constant.
+
+	- Check compare result by conditional jump instruction:
+			B.cond label	-> if(cond) goto label
+
+		cond		|	meaning
+		EQ		|	X1 == X2
+		NE		|	X1 != X2
+		GT (unsigned HI)|	X1 > X2
+		LT (unsigned LO)|	x1 < x2
+		GE (unsigned HS)|	x1 >= x2
+		LE (unsigned LS)|	x1 <= x2
+	
+	- Branch with no condition:
+			B label		-> goto label.
+			BR X1		-> goto address in X1.
+			BL label	-> goto procedure label 
+					   and save the instruction next to BL to return.
+
+	LOOP
+	* Syntax:
+		Loop:
+			instructions
+			B.cond Loop
+	
+	* Similar to others loop in C:
+	- while
+
+	- for
+
+	- do...while
+
+	* Principles:
+	- Rewrite the loop as goto.
+
+	- Use conditional branch LEGv8 instructions.
+
+	
+	PROCEDURE
+	* LEGv8 supports some registers to store data of procedure:
+	- Argument input: X0-X7.
+
+	- Return: X0-X1.
+
+	- Caller-saved registers: X0-X18. (like pass-by-value)
+	
+
+	- Callee-saved registers: X19-X28. (Callee -> )
+
+	- Link return: X30.
+
+	* Procedure call: BL procedure_name
+
+	* Stack:
+	- Consists of many combined memory cells located in main memory.
+
+	- Ideal structure for containing temporary value in register.
+
+	- Located and managed by stack pointer:
+		+ Store data to stack:
+	
+			STP X0, [SP, #-8]	-> SP = SP - 8, store X0 to SP
+
+		+ Load data from stack:
+
+			LTP X0, [SP, #8]	-> SP = SP + 8, pop top and store it to X0.
+
+	- In LEGv8, there is a register to store stack pointer (X28).
+
+	* Procedure structure:
+	- Head of procedure:
+		PROCEDURE_LABEL:
+			STP LR, [SP, #-8]
+
+	- Body of procedure:
+		BL OTHER_PROCEDURE
+
+	- End of procedure:
+		LTP LR, [SP, #8]
+		RET
+
+
+	LEGV8 PROGRAM STRUCTURE
+	
+	.section .data
+		var1: .word 5	-> Initialized global variable
+
+	.section .bss
+		var2: .space 100 -> Uninitialized global variable
+
+	.section .text
+	.global _start	// Start program
+	_start
+		// CODE HERE
+
+	
+	DATA TYPE
+	* Static type (initialize in .section .data):
+	- Integer: byte (1 byte), hword (2 byte), word (4 byte), dword (8 byte).
+
+	- Real:	float (single floating point), double (double floating point).
+
+	- string: ascii, asciz.
+
+	* Dynamic type (initialize in .section .bss): .skip(array - byte), .space(array - ascii).
+
+		Ex:
+		.section .data
+			var1: .word 42     			-> var1(word) = 42
+			var2: .dword 100    			-> var2(word) = 100
+			array: .byte 1, 2, 3, 4  		-> array(byte) = {1,2,3,4}
+			array2: .half 1000, 2000, 3000, 4000   	-> array2(half) = {1000,2000,3000,4000}
+			float1: .float 3.14			-> float1(float) = 3.14
+			string: .ascii "Hello, LEGv8!"		-> string(ascii) = "Hello, LEGv8!"
+		
+		.section .bss
+			str: .space 100				-> |str(ascii)| = 100
+			arr: .skip 100				-> |arr(byte)| = 100
+	
+	
+	USING LIBRARY C
+		.extern printf
+		.section .data
+			tb1:  .asciz "Hello, world!\n"
+		.section .text
+		.global main
+		main:
+		// Address assignment
+		adrp x0, tb1           		
+		add x0, x0, :lo12:tb1          
+ 
+		bl printf                       //  printf
+
+		// Exit program
+		mov x0, #0             		// Giá trị trả về của hàm là 0 
+		mov x8, #93          		// x8 = syscall exit 
+		svc #0                   	// syscall
+		
+	
+	CORE INSTRUCTION FORMAT
+	* R-Type: Used for 3 register ALU operations and shift.
+	- Opcode: ADD, SUB, LSR, AND, ORR, ... (11 bits).
+	- Rm: The second operand (5 bits). 
+	- SHAMT: Shift amount (6 bits).
+	- Rn: The first operand (5 bits).
+	- Rd: Destination (5 bits).
+
+	* I-Type: Used for 2 register and 1 constant ALU operations.
+	- Opcode: ADDI, ANDI, ORRI, SUBI, ... (10 bits).
+	- ALU_Imm12: constant (12 bits).
+	- Rn: The operand (5 bits).
+	- Rd: Destination (5 bits).
+
+	* B-Type: Used for unconditional branches.
+	- B: 000101 (6 bits)
+	- BrAddr26: Branch address (26 bits).
+
+	* CB-Type: Used for conditional branches. 
+	- Opcode: B.cond, CBZ, CBNZ (8 bits).
+	- CondAddr19: offset (19 bits).
+	- Rd: Register (5 bits)
+
+	* D-Type: Used for memory accesses.
+	- Opcode: STURB, LDURB, STUR, ... (11 bits).
+	- DAddr9: constant (9 bits).
+	- op2: 00 (2 bits).
+	- Rn: The operand (5 bits).
+	- Rd: Target register (5 bits).
+
+	* IW-Type:
+	

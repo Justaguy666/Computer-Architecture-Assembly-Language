@@ -1,0 +1,244 @@
+	INSTRUCTION:
+	* The sequence bit that contains the request that processor must 
+	take.
+	
+	* An instruction includes two parts:
+	- Opcode: The operation ALU must take.
+
+	- Operand: Objects affected by the action contained in the code.
+
+
+	INSTRUCTION SET ARCHITECTURE (ISA)
+	* The format and behavior of a machine-level program is defined
+	by the instruction set architecture.
+
+	* Different computers have different instruction sets but with
+	many aspects in common.
+
+	* Commonly ISA:
+	- MIPS: used in embedded system.
+	
+	- ARM: A64, A32, T32.
+
+	- Power-PC.
+
+	- IA-16: 16-bits processor (Intel 8086, 80186, 80286)
+
+	- IA-32: 32-bits processor (Intel 80386 - i386, 80486 - i486, 
+	Pentium II, Pentium III ...)
+
+	- IA-64: 64-bits processor (Intel x86-64 - Pentium D ...)
+
+
+	ISA DESIGN: CISC & RISC
+	* Complete instruction set computer: Includes many instructions,
+	from simple to complex.
+
+	* Reduced instruction set computer: Consists of only simple 
+	instructions.
+
+	
+	High-level language ->(compiler) Assembly language ->(assembler)
+	Machine language.
+
+
+	ASSEMLY LANGUAGE
+	* A symbolic representation of machine code, clearer than in 
+	machine code.
+	
+	* Each assembly instruction represents exactly one machine 	
+	instruction.
+
+	* Since each processor has its own register structure and 
+	instruction set when setting the assembly, it must be clear which
+	processor is set, or the family of the processor.
+
+	
+	COMPILER
+	* A program that translates high-level language statements into 
+	assembly language statements.
+
+	* Belong to:
+	- The system hardware architecture below which it is running.
+
+	- The high-level language which it compiles.
+
+	
+	ASSEMBLER
+	* A program that translates assembler language statements into
+	the machine code.
+
+	* A single processor (1 set of definitions) can have multiple
+	assemblers from different vendors running on different operating 
+	systems.
+
+	* The assembly program depends on the assembler it uses.
+	
+	
+	LINKER
+	A systems program that combines independently assembled machine
+	language programs (object file) and resolves all undefined labels
+	into an executable file.
+
+
+	LOADER
+	A system program that places an object program in main memory so
+	that it is ready to execute.
+
+	
+	REALISTIC MODEL
+	* Compiler and assembler can be skipped in the certain cases.
+
+	* In fact, there are several compilers that can create executables
+	on a variety of underlying architecture platforms.
+
+
+	INSTRUCTION PROCESSING
+	Consists of two phases:
+	* Fetch cycle: Transfer data from memory to registers.
+	- Program counter (PC): Holds the address of the next 
+	instruction to be fetch from memory. After the current 
+	instruction is executed, the PC is updated to point to
+	the next instruction in the program.
+
+	* Execute cycle: Decode the instruction and execute the 
+	requirements of it.
+
+	- Memory address register (MAR): Stores the address of a
+	location in memory.
+		+ This is the address that the CPU wants to access,
+		either to read data from or write data to memory.
+
+		+ The addresses stored in MAR is sent to address 
+		bus, allowing the CPU to locate the correct 
+		position in memory.
+
+	- Memory buffer register (MBR): Holds a word of data.
+		+ When writing to memory: The MBR contains the data 
+		to be written.
+
+		+ When reading from memory: The MBR holds the data
+		most recent read from memory.
+
+		+ The MBR connects to the data bus, facilitating 
+		data transfer between the CPU and memory.
+
+	- Instruction register (IR): Stores the most recently 
+	fetched instruction from memory. After an instruction is 
+	loaded into the IR, the CPU begins decoding the opcode 
+	and operands to prepare for execution.
+	
+
+	CYCLE:
+	1. Move the instruction from the address in the PC to the IR:
+		- The PC contains the address of the next instruction
+		to be fetch.
+
+		- This address is moved to the MAR to retrieve the
+		instruction from memory.
+
+		- The instruction is then loaded into the IR for
+		decoding and execution.
+
+	2. Update the PC:
+		- After fetching the instruction, the PC is updated
+		to point to the next instruction.
+
+		- Specifically, the PC is incremented by the size of 
+		the fetched instruction.
+
+	3. Decode the instruction:
+		- The instruction is loaded into IR, and the CPU decodes
+		it to determine the required operation.
+
+		- The opcode indicates the operation to be performed, and
+		the operands provide the data or addresses involved in the
+		operation.
+
+	4. Exchange data with memory:
+		- The CPU uses the MAR and MBR to perform read or write
+		operations to/from memory.
+
+		- The MAR holds the address of the memory location being
+		accessed, and the MBR contains the data being written or
+		the data recently read.
+ 
+
+	MEANSURING EXECUTION TIME
+	* Elapsed time:
+	Total response time, including all aspects: processing, i/o, idle
+	time, OS overhead.
+
+	* CPU time:
+	- Time spent processing a given task.
+
+	- Comprise user CPU time and system CPU time.
+
+	- Different program are affected differently by CPU and system performance.
+
+
+	CLOCK CYCLES
+	Instead of reporting execution times in seconds, we often use cycles.
+	In modern computers hardware events progress cycle by cycle: In other
+	words, each event, e.g., multiplication, addition, etc., is a sequence
+	of cycles.
+
+		(seconds / program) = (cycles / program) * (seconds / cycle)
+
+
+	CPU TIME
+	
+		CPU time = (instructions / program) * (CPU clock cycles / instruction) * (seconds * CPU clock cycle)
+
+	Performance depends on: Algorithm, Programing language, Compiler, ISA.
+
+
+
+	UNIPROCESSOR VS MULTIPROCESSOR
+							
+	Constrained by:				|	Multicore microprocessors.
+	- Power.				|	
+						|	Requires explicitly parallel programming:
+	- Instruction-level parallelism.	|	- Compare with instruction level parallelism.
+						|
+	- Memory latency.			|	- Hard to do.
+
+	
+	
+	INSTRUCTION TYPE (32-bits pattern)
+	* R-Type: Used for 3 register ALU operations and shift.
+	- Opcode: ADD, SUB, LSR, AND, ORR, ... (11 bits).
+	- Rm: The second operand (5 bits). 
+	- SHAMT: Shift amount (6 bits).
+	- Rn: The first operand (5 bits).
+	- Rd: Destination (5 bits).
+
+	* I-Type: Used for 2 register and 1 constant ALU operations.
+	- Opcode: ADDI, ANDI, ORRI, SUBI, ... (10 bits).
+	- ALU_Imm12: constant (12 bits).
+	- Rn: The operand (5 bits).
+	- Rd: Destination (5 bits).
+
+	* B-Type: Used for unconditional branches.
+	- B: 000101 (6 bits)
+	- BrAddr26: Branch address (26 bits).
+
+	* CB-Type: Used for conditional branches. 
+	- Opcode: B.cond, CBZ, CBNZ (8 bits).
+	- CondAddr19: offset (19 bits).
+	- Rd: Register (5 bits)
+
+	* D-Type: Used for memory accesses.
+	- Opcode: STURB, LDURB, STUR, ... (11 bits).
+	- DAddr9: constant (9 bits).
+	- 00: 00 (2 bits).
+	- Rn: The operand (5 bits).
+	- Rd: Target register (5 bits).
+	
+	* S-Type
+
+	* U-Type
+
+	* J-Type
+
+	* IW-Type
